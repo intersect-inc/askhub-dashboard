@@ -10,8 +10,8 @@ import { auth } from '@/lib/next-auth'
 
 import { Path } from '@/lib/path'
 import { isAfterTime } from '@/utils/time'
+import Logo from '../../../public/vectors/logo.svg'
 import { InitClientSideProvider } from '../init-client-side-provider'
-
 export const AuthenticateProvider = async ({
   children,
 }: {
@@ -21,7 +21,7 @@ export const AuthenticateProvider = async ({
     <Suspense
       fallback={
         <div className="flex h-screen w-screen flex-col items-center justify-center gap-2 bg-bg-white-0">
-          {/* <Logo className="size-20 shrink-0" /> */}
+          <Logo className="size-20 shrink-0" />
         </div>
       }
     >

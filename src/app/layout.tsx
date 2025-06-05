@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="jp" className="dark">
+    <html lang="jp">
       <body className={`${pretendardJp.variable} antialiased`}>{children}</body>
     </html>
   )
