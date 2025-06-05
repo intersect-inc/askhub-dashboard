@@ -43,6 +43,12 @@ const authConfig = {
     },
     async signIn({ profile }: { profile?: any }) {
       try {
+        // ドメイン制限チェック
+        const email = profile?.email ?? ''
+        if (!email.endsWith('@intersect.inc')) {
+          return false
+        }
+
         const res = await login({
           givenName: profile?.given_name ?? '',
           familyName: profile?.family_name ?? '',
