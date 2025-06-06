@@ -18,6 +18,8 @@ import {
 } from '@remixicon/react'
 import React from 'react'
 
+import * as Button from '@/components/ui/button'
+
 // アイコンマッピング
 const iconMap = {
   home: RiHomeLine,
@@ -165,16 +167,20 @@ function SidebarHeader({
             )}
           </div>
           {showToggle && (
-            <button
+            <Button.Root
+              variant="neutral"
+              mode="ghost"
+              size="small"
               onClick={() => setCollapsed(!collapsed)}
-              className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-bg-white-0 ring-1 ring-inset ring-stroke-soft-200 transition-colors hover:bg-bg-weak-50"
             >
-              {collapsed ? (
-                <RiArrowRightDoubleLine className="size-4 text-text-sub-600" />
-              ) : (
-                <RiArrowLeftDoubleLine className="size-4 text-text-sub-600" />
-              )}
-            </button>
+              <Button.Icon>
+                {collapsed ? (
+                  <RiArrowRightDoubleLine className="size-5 text-text-sub-600" />
+                ) : (
+                  <RiArrowLeftDoubleLine className="size-5 text-text-sub-600" />
+                )}
+              </Button.Icon>
+            </Button.Root>
           )}
         </>
       )}
@@ -191,7 +197,7 @@ const SidebarContent = React.forwardRef<
     <div
       ref={forwardedRef}
       className={cn(
-        'flex w-full flex-1 flex-col items-center gap-1 overflow-y-auto p-2',
+        'flex w-full flex-1 flex-col gap-1 overflow-y-auto p-2',
         className
       )}
       {...rest}
@@ -241,7 +247,7 @@ const SidebarItem = React.forwardRef<
           // default state
           !active && !disabled && 'text-text-sub-600',
           // collapsed state
-          collapsed && 'w-8 justify-center gap-0 px-2',
+          collapsed && 'mx-auto w-8 justify-center gap-0 px-2',
           className
         )}
         title={collapsed ? label : undefined}
@@ -249,7 +255,7 @@ const SidebarItem = React.forwardRef<
       >
         {children || (
           <>
-            {IconComponent && <IconComponent className="size-4 shrink-0" />}
+            {IconComponent && <IconComponent className="size-5 shrink-0" />}
             {!collapsed && (
               <span
                 className={cn(

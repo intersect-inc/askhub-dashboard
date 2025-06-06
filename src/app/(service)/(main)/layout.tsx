@@ -1,5 +1,6 @@
 import * as Sidebar from '@/components/elements/siderbar'
 import AskhubIcon from '../../../../public/vectors/logo.svg'
+import { SidebarFooterItem } from './_components/sidebar-footer-item'
 import { SidebarItems } from './_components/sidebar-items'
 
 export default function MainLayout({
@@ -16,7 +17,9 @@ export default function MainLayout({
           description="管理画面"
         />
         <SidebarItems />
-        <Sidebar.Footer>フッターコンテンツ</Sidebar.Footer>
+        <Sidebar.Footer>
+          <SidebarFooterItem />
+        </Sidebar.Footer>
       </Sidebar.Root>
       {children}
     </div>

@@ -16,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="jp">
-      <body className={`${pretendardJp.variable} antialiased`}>{children}</body>
+      <body className={`${pretendardJp.variable} bg-bg-white-0 antialiased`}>
+        {children}
+      </body>
     </html>
   )
 }
