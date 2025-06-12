@@ -2,6 +2,7 @@
 
 import * as Button from '@/components/ui/button'
 
+import { RiLogoutBoxRLine } from '@remixicon/react'
 import { useLogout } from '../../api/logout'
 
 type Props = {
@@ -12,13 +13,16 @@ export const LogoutButton = ({ className }: Props) => {
   const { trigger, isMutating } = useLogout()
   return (
     <Button.Root
-      variant="primary"
+      variant="neutral"
+      mode="ghost"
       size="small"
       className={className}
       onClick={() => trigger()}
       disabled={isMutating}
     >
-      ログアウト
+      <Button.Icon>
+        <RiLogoutBoxRLine className="size-5" />
+      </Button.Icon>
     </Button.Root>
   )
 }
