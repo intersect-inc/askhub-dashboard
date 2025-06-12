@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 import defaultTheme from 'tailwindcss/defaultTheme'
+import { TOAST_ANIMATION, TOAST_KEYFRAMES } from './src/providers/toast/style'
 import { pretendardJpVar } from './src/styles/font/variables'
 
 export const texts = {
@@ -600,6 +601,7 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        ...TOAST_ANIMATION,
       },
       keyframes: {
         'accordion-down': {
@@ -613,6 +615,7 @@ const config = {
           },
           to: { height: '0', opacity: '0' },
         },
+        ...TOAST_KEYFRAMES,
       },
       fontFamily: {
         sans: [`var(${pretendardJpVar})`, ...defaultTheme.fontFamily.sans],

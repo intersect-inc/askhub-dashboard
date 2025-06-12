@@ -6,6 +6,7 @@ import * as React from 'react'
 import type { PolymorphicComponentProps } from '@/utils/polymorphic'
 import { recursiveCloneChildren } from '@/utils/recursive-clone-children'
 import { tv, type VariantProps } from '@/utils/tv'
+import { RiLoader4Line } from '@remixicon/react'
 
 const BUTTON_ROOT_NAME = 'ButtonRoot'
 const BUTTON_ICON_NAME = 'ButtonIcon'
@@ -253,11 +254,12 @@ type ButtonSharedProps = VariantProps<typeof buttonVariants>
 type ButtonRootProps = VariantProps<typeof buttonVariants> &
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     asChild?: boolean
+    isLoading?: boolean
   }
 
 const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
   (
-    { children, variant, mode, size, asChild, className, ...rest },
+    { children, variant, mode, size, asChild, className, isLoading, ...rest },
     forwardedRef
   ) => {
     const uniqueId = React.useId()
@@ -284,7 +286,11 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
         className={root({ class: className })}
         {...rest}
       >
-        {extendedChildren}
+        {isLoading ? (
+          <RiLoader4Line className="animate-spin" />
+        ) : (
+          extendedChildren
+        )}
       </Component>
     )
   }

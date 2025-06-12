@@ -25,7 +25,9 @@ export const SidebarFooterItem = () => {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={me?.currentWorkspaceMember.icon ?? undefined}
+            src={
+              me?.currentWorkspaceMember.icon ?? '/images/no-image-avatar.png'
+            }
             alt="avatar"
             width={40}
             height={40}

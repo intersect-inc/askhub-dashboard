@@ -24,19 +24,19 @@ export const alertVariants = tv({
   variants: {
     variant: {
       filled: {
-        root: 'text-static-white',
+        root: 'text-label-sm text-static-white',
         closeIcon: 'text-static-white opacity-[.72]',
       },
       light: {
-        root: 'text-text-strong-950',
+        root: 'text-label-sm text-text-strong-950',
         closeIcon: 'text-text-strong-950 opacity-40',
       },
       lighter: {
-        root: 'text-text-strong-950',
+        root: 'text-label-sm text-text-strong-950',
         closeIcon: 'text-text-strong-950 opacity-40',
       },
       stroke: {
-        root: 'bg-bg-white-0 text-text-strong-950 shadow-regular-md ring-1 ring-inset ring-stroke-soft-200',
+        root: 'bg-bg-white-0 text-label-sm text-text-strong-950 shadow-regular-md ring-1 ring-inset ring-stroke-soft-200',
         closeIcon: 'text-text-strong-950 opacity-40',
       },
     },
