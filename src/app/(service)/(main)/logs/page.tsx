@@ -7,7 +7,7 @@ export default function LogsPage() {
       <PageHeader
         title="ログ"
         description="Askhubの利用ログを確認できます。"
-        icon={<RiHistoryLine />}
+        leftIcon={<RiHistoryLine />}
       />
     </div>
   )

@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/toast'
 import { pretendardJp } from '@/styles/font/local-fonts'
 import type { Metadata } from 'next'
 import '../styles/globals.css'
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="jp">
       <body className={`${pretendardJp.variable} bg-bg-white-0 antialiased`}>
         {children}
+        <Toaster />
       </body>
     </html>
   )
