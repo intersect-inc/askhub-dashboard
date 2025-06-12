@@ -11,22 +11,24 @@ export const SidebarFooterItem = () => {
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-2 transition-all duration-300'
+        'flex items-center justify-between gap-3 py-3 transition-all duration-300'
       )}
     >
       {!collapsed && (
         <div
           className={cn(
-            'flex items-center justify-between gap-2 transition-all duration-300',
-            collapsed ? 'w-0 overflow-hidden opacity-0' : 'w-auto opacity-100'
+            'flex items-center justify-between gap-3 transition-all duration-300',
+            collapsed
+              ? 'hidden w-0 overflow-hidden opacity-0'
+              : 'w-auto opacity-100'
           )}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={me?.currentWorkspaceMember.icon ?? ''}
+            src={me?.currentWorkspaceMember.icon ?? undefined}
             alt="avatar"
-            width={32}
-            height={32}
+            width={40}
+            height={40}
             className="shrink-0 rounded-full"
           />
           <div>

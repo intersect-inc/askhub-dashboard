@@ -94,9 +94,9 @@ const SidebarRoot = React.forwardRef<
           ref={forwardedRef}
           className={cn(
             // base
-            'flex h-full flex-col border-r border-stroke-soft-200 bg-bg-white-0 transition-all duration-300',
+            'flex h-full shrink-0 flex-col border-r border-stroke-soft-200 bg-bg-white-0 transition-all duration-300',
             // width based on collapsed state
-            collapsed ? 'w-16' : 'w-64',
+            collapsed ? 'w-[68px]' : 'w-72',
             className
           )}
           {...rest}
@@ -125,13 +125,10 @@ function SidebarHeader({
 }) {
   const { collapsed, setCollapsed } = useSidebar()
 
-  // アイコンの解決
-  //   const IconComponent = typeof icon === 'string' ? iconMap[icon] : icon
-
   return (
     <div
       className={cn(
-        'flex items-center border-b border-stroke-soft-200 px-4 py-3',
+        'mx-3 flex items-center border-b border-stroke-soft-200 py-6',
         !collapsed && 'gap-3',
         className
       )}
@@ -142,8 +139,10 @@ function SidebarHeader({
           {icon && (
             <div
               className={cn(
-                'flex size-8 shrink-0 items-center justify-center rounded-lg bg-bg-white-0 transition-all duration-300',
-                collapsed ? 'w-0 overflow-hidden opacity-0' : 'w-8 opacity-100'
+                'flex size-10 shrink-0 items-center justify-center rounded-lg bg-bg-white-0 transition-all duration-300',
+                collapsed
+                  ? 'hidden w-0 overflow-hidden opacity-0'
+                  : 'w-10 opacity-100'
               )}
             >
               {icon}
@@ -241,11 +240,11 @@ const SidebarItem = React.forwardRef<
           // states
           'hover:bg-bg-weak-50 focus:outline-none focus:ring-2 focus:ring-stroke-strong-950',
           // active state
-          active && 'bg-bg-weak-50 text-text-strong-950',
+          active && 'text-strong-950 bg-bg-weak-50',
           // disabled state
           disabled && 'pointer-events-none opacity-50',
           // default state
-          !active && !disabled && 'text-text-sub-600',
+          !active && !disabled && 'text-sub-600',
           // collapsed state
           collapsed && 'mx-auto w-8 justify-center gap-0 px-2',
           className
@@ -255,11 +254,13 @@ const SidebarItem = React.forwardRef<
       >
         {children || (
           <>
-            {IconComponent && <IconComponent className="size-5 shrink-0" />}
+            {IconComponent && (
+              <IconComponent className="size-5 shrink-0 text-text-sub-600" />
+            )}
             {!collapsed && (
               <span
                 className={cn(
-                  'flex-1 truncate transition-all duration-300',
+                  'flex-1 truncate text-text-strong-950 transition-all duration-300',
                   'w-auto opacity-100'
                 )}
               >
@@ -280,7 +281,7 @@ function SidebarFooter({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('border-t border-stroke-soft-200 p-4', className)}
+      className={cn('mx-3 border-t border-stroke-soft-200 py-3', className)}
       {...rest}
     />
   )

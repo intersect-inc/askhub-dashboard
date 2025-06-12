@@ -12,7 +12,7 @@ export default function MainLayout({
     <div className="flex h-screen">
       <Sidebar.Root>
         <Sidebar.Header
-          icon={<AskhubIcon className="size-6" />}
+          icon={<AskhubIcon className="size-8" />}
           title="Askhub"
           description="管理画面"
         />
