@@ -2,6 +2,7 @@
 
 import { BreadcrumbPageHeader } from '@/components/elements/page-header'
 import { useWorkspaces } from '@/features/workspaces/api/getWorkspaces'
+import { WorksapceRoute } from '@/features/workspaces/routes/worksapce'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
@@ -14,7 +15,7 @@ export default function WorkspacePage() {
   )?.name
 
   return (
-    <div>
+    <div className="size-full">
       <BreadcrumbPageHeader
         breadcrumbItems={[
           <Link href="/workspaces" key="workspaces">
@@ -23,6 +24,7 @@ export default function WorkspacePage() {
           <span key="workspace-name">{workspaceName}</span>,
         ]}
       />
+      <WorksapceRoute workspaceUuid={workspaceUuid as string} />
     </div>
   )
 }
