@@ -1,4 +1,8 @@
+import * as Divider from '@/components/ui/divider'
 import { KeyIcons } from '@/components/ui/key-icons'
+import { cn } from '@/utils/cn'
+import { RiArrowRightSLine } from '@remixicon/react'
+import React, { ReactNode } from 'react'
 
 type PageHeaderProps = {
   title: string
@@ -6,6 +10,8 @@ type PageHeaderProps = {
   leftIcon?: React.ReactNode
   children?: React.ReactNode
 }
+
+export const PAGE_HEADER_ID = 'page-header'
 
 export const PageHeader = ({
   title,
@@ -27,6 +33,39 @@ export const PageHeader = ({
         </div>
       </div>
       {children}
+    </div>
+  )
+}
+
+export const BreadcrumbPageHeader = (props: {
+  breadcrumbItems: ReactNode[]
+  className?: string
+  children?: ReactNode
+}) => {
+  const { breadcrumbItems, className, children } = props
+  return (
+    <div
+      className={cn('flex w-full flex-col px-8', className)}
+      id={PAGE_HEADER_ID}
+    >
+      <div className="flex min-h-[88px] items-center justify-between gap-3 py-5">
+        <div className="flex w-fit items-center gap-1">
+          {breadcrumbItems.map((item, index) =>
+            index == 0 ? (
+              <React.Fragment key={index}>{item}</React.Fragment>
+            ) : (
+              <React.Fragment key={index}>
+                <span className="inline-block shrink-0">
+                  <RiArrowRightSLine className="text-text-soft-400" />
+                </span>
+                {item}
+              </React.Fragment>
+            )
+          )}
+        </div>
+        {children}
+      </div>
+      <Divider.Root />
     </div>
   )
 }

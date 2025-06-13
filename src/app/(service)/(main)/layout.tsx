@@ -9,8 +9,8 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-screen">
-      <Sidebar.Root>
+    <div className="flex h-dvh max-h-dvh w-screen overflow-hidden">
+      <Sidebar.Root className="h-dvh">
         <Sidebar.Header
           icon={<AskhubIcon className="size-8" />}
           title="Askhub"
@@ -21,7 +21,7 @@ export default function MainLayout({
           <SidebarFooterItem />
         </Sidebar.Footer>
       </Sidebar.Root>
-      {children}
+      <div className="min-w-0 flex-1">{children}</div>
     </div>
   )
 }
