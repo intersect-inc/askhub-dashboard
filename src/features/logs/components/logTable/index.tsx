@@ -64,17 +64,37 @@ export const LogTable = ({
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container
+      const remaining = scrollHeight - scrollTop - clientHeight
+
       // 残り100px以下になったら次のページを読み込み
-      if (scrollHeight - scrollTop - clientHeight < 100) {
+      if (remaining < 100 && !isLoading && !isValidating) {
         loadMore()
       }
     }
 
     container.addEventListener('scroll', handleScroll)
     return () => container.removeEventListener('scroll', handleScroll)
-  }, [loadMore])
+  }, [loadMore, size, isLoading, isValidating, allMessages.length])
 
-  if (error) return <div>エラーが発生しました</div>
+  // データロード後の初期チェック
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const container = scrollContainerRef.current
+      if (container) {
+        const { scrollTop, scrollHeight, clientHeight } = container
+        const remaining = scrollHeight - scrollTop - clientHeight
+
+        // コンテンツが少ない場合は自動的に次のページを読み込み
+        if (remaining < 100 && !isLoading && !isValidating) {
+          loadMore()
+        }
+      }
+    }
+  }, [data, loadMore, isLoading, isValidating])
+
+  if (error) {
+    return <div>エラーが発生しました: {error.message}</div>
+  }
   if (isLoading) return <div>読み込み中...</div>
 
   return (
