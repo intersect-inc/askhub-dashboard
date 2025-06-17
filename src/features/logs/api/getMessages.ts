@@ -1,10 +1,13 @@
 'use client'
 
 import useSWR from 'swr'
+import useSWRInfinite from 'swr/infinite'
 import { z } from 'zod'
 
 import { AIModel, ActionType, FileType } from '@/features/types'
 import { client } from '@/lib/api'
+
+export type { MessageRole }
 
 // スキーマ定義
 const MessageRole = z.enum(['user', 'assistant', 'system', 'tool'])
@@ -91,5 +94,45 @@ export const useMessages = (
 
   return useSWR<AdminMessageListResponse>(key, messagesFetcher, {
     revalidateOnFocus: false,
+  })
+}
+
+export const useInfiniteMessages = (
+  workspaceUuid?: string,
+  userUuid?: string,
+  role?: MessageRole
+) => {
+  const params: Record<string, string> = {
+    ...(workspaceUuid && { workspace_uuid: workspaceUuid }),
+    ...(userUuid && { workspace_member_uuid: userUuid }),
+    ...(role && { message_role: role }),
+  }
+
+  const queryString = new URLSearchParams(params).toString()
+
+  const getKey = (
+    pageIndex: number,
+    previousPageData: AdminMessageListResponse | null
+  ) => {
+    // 最初のページ
+    if (pageIndex === 0) {
+      return queryString
+        ? `admin/messages/1?${queryString}`
+        : 'admin/messages/1'
+    }
+
+    // 前のページのデータがない場合は終了
+    if (previousPageData && !previousPageData.messages.length) return null
+
+    // 次のページ
+    const page = pageIndex + 1
+    return queryString
+      ? `admin/messages/${page}?${queryString}`
+      : `admin/messages/${page}`
+  }
+
+  return useSWRInfinite<AdminMessageListResponse>(getKey, messagesFetcher, {
+    revalidateOnFocus: false,
+    revalidateFirstPage: false,
   })
 }

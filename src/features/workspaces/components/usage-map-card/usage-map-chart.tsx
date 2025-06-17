@@ -54,7 +54,7 @@ export const UsageMapChart = (props: Props) => {
   }
 
   return (
-    <div style={{ width: '200px', height: '200px' }}>
+    <div style={{ width: '240px', height: '240px' }}>
       <Pie data={chartData} options={options} />
     </div>
   )

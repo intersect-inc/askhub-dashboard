@@ -261,11 +261,12 @@ export const borderRadii = {
 
 const config = {
   darkMode: ['class'],
-  safelist: ['.dark'],
+  safelist: ['.dark', '.dot'],
   content: [
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/utils/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/features/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './utils/**/*.{js,ts,jsx,tsx,mdx}',
@@ -649,6 +650,12 @@ const config = {
           scrollbarColor: 'transparent transparent',
           '&:hover': {
             scrollbarColor: '#D0D5DD transparent',
+          },
+        },
+        '.dot': {
+          '&::before': {
+            content: '""',
+            display: 'block',
           },
         },
       })

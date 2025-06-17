@@ -19,6 +19,7 @@ import {
 import React from 'react'
 
 import * as Button from '@/components/ui/button'
+import { useSidebarStore } from '@/stores/useSidebarStore'
 
 // アイコンマッピング
 const iconMap = {
@@ -36,77 +37,55 @@ const iconMap = {
 
 type IconName = keyof typeof iconMap
 
-interface SidebarContextType {
-  collapsed: boolean
-  setCollapsed: (collapsed: boolean) => void
-}
-
-const SidebarContext = React.createContext<SidebarContextType | undefined>(
-  undefined
-)
-
-const useSidebar = () => {
-  const context = React.useContext(SidebarContext)
-  if (!context) {
-    throw new Error('useSidebar must be used within a SidebarRoot')
-  }
-  return context
-}
-
 const SidebarRoot = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
-    defaultCollapsed?: boolean
-    onCollapsedChange?: (collapsed: boolean) => void
-  }
->(
-  (
-    {
-      className,
-      defaultCollapsed = false,
-      onCollapsedChange,
-      children,
-      ...rest
-    },
-    forwardedRef
-  ) => {
-    const [collapsed, setCollapsed] = React.useState(defaultCollapsed)
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...rest }, forwardedRef) => {
+  const { collapsed, hovered, setHovered } = useSidebarStore()
 
-    const handleCollapsedChange = React.useCallback(
-      (newCollapsed: boolean) => {
-        setCollapsed(newCollapsed)
-        onCollapsedChange?.(newCollapsed)
-      },
-      [onCollapsedChange]
-    )
-
-    const contextValue = React.useMemo(
-      () => ({
-        collapsed,
-        setCollapsed: handleCollapsedChange,
-      }),
-      [collapsed, handleCollapsedChange]
-    )
-
-    return (
-      <SidebarContext.Provider value={contextValue}>
-        <div
-          ref={forwardedRef}
-          className={cn(
-            // base
-            'flex h-full shrink-0 flex-col border-r border-stroke-soft-200 bg-bg-white-0 transition-all duration-300',
-            // width based on collapsed state
-            collapsed ? 'w-[68px]' : 'w-72',
-            className
-          )}
-          {...rest}
-        >
-          {children}
-        </div>
-      </SidebarContext.Provider>
-    )
-  }
-)
+  return (
+    <div
+      ref={forwardedRef}
+      data-sidebar="root"
+      className={cn(
+        // base
+        'flex shrink-0 flex-col bg-bg-white-0',
+        // smooth transitions for width changes
+        'transition-all duration-200 ease-out',
+        // positioning based on collapsed state
+        collapsed
+          ? 'fixed left-1 top-1 z-50'
+          : 'fixed left-0 top-0 z-40 h-full',
+        // border and corner styles with transition
+        collapsed && hovered
+          ? 'rounded-xl border border-stroke-soft-200'
+          : collapsed && !hovered
+            ? 'border-0'
+            : 'border-r border-stroke-soft-200',
+        // shadow effects based on state
+        collapsed ? 'shadow-lg' : 'shadow-none',
+        // width and slide transition
+        collapsed && !hovered
+          ? 'w-0 -translate-x-full overflow-hidden'
+          : collapsed && hovered
+            ? 'w-72 translate-x-0'
+            : 'w-72 translate-x-0',
+        className
+      )}
+      style={{
+        height: collapsed ? 'calc(100vh - 8px)' : undefined,
+        transitionProperty: 'all',
+        transitionDuration: '200ms',
+        transitionTimingFunction: 'ease-out',
+      }}
+      onMouseEnter={() => collapsed && setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+})
 SidebarRoot.displayName = 'SidebarRoot'
 
 function SidebarHeader({
@@ -123,13 +102,12 @@ function SidebarHeader({
   description?: string
   showToggle?: boolean
 }) {
-  const { collapsed, setCollapsed } = useSidebar()
+  const { collapsed, toggleCollapsed } = useSidebarStore()
 
   return (
     <div
       className={cn(
-        'mx-3 flex items-center border-b border-stroke-soft-200 py-6',
-        !collapsed && 'gap-3',
+        'mx-3 flex items-center gap-3 border-b border-stroke-soft-200 py-6',
         className
       )}
       {...rest}
@@ -140,9 +118,7 @@ function SidebarHeader({
             <div
               className={cn(
                 'flex size-10 shrink-0 items-center justify-center rounded-lg bg-bg-white-0 transition-all duration-300',
-                collapsed
-                  ? 'hidden w-0 overflow-hidden opacity-0'
-                  : 'w-10 opacity-100'
+                'w-10 opacity-100'
               )}
             >
               {icon}
@@ -151,7 +127,7 @@ function SidebarHeader({
           <div
             className={cn(
               'flex-1 space-y-0.5 transition-all duration-300',
-              collapsed ? 'w-0 overflow-hidden opacity-0' : 'w-auto opacity-100'
+              'w-auto opacity-100'
             )}
           >
             {title && (
@@ -170,7 +146,7 @@ function SidebarHeader({
               variant="neutral"
               mode="ghost"
               size="small"
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={toggleCollapsed}
             >
               <Button.Icon>
                 {collapsed ? (
@@ -226,7 +202,7 @@ const SidebarItem = React.forwardRef<
     },
     forwardedRef
   ) => {
-    const { collapsed } = useSidebar()
+    const { collapsed } = useSidebarStore()
 
     // アイコンの解決
     const IconComponent = typeof icon === 'string' ? iconMap[icon] : icon
@@ -240,13 +216,12 @@ const SidebarItem = React.forwardRef<
           // states
           'hover:bg-bg-weak-50 focus:outline-none focus:ring-2 focus:ring-stroke-strong-950',
           // active state
-          active && 'text-strong-950 bg-bg-weak-50',
+          active && 'bg-bg-weak-50 text-text-strong-950',
           // disabled state
           disabled && 'pointer-events-none opacity-50',
           // default state
-          !active && !disabled && 'text-sub-600',
-          // collapsed state
-          collapsed && 'mx-auto w-8 justify-center gap-0 px-2',
+          !active && !disabled && 'text-text-sub-600',
+          // collapsed state - remove specific collapsed styling to show full content
           className
         )}
         title={collapsed ? label : undefined}
@@ -257,16 +232,14 @@ const SidebarItem = React.forwardRef<
             {IconComponent && (
               <IconComponent className="size-5 shrink-0 text-text-sub-600" />
             )}
-            {!collapsed && (
-              <span
-                className={cn(
-                  'flex-1 truncate text-text-strong-950 transition-all duration-300',
-                  'w-auto opacity-100'
-                )}
-              >
-                {label}
-              </span>
-            )}
+            <span
+              className={cn(
+                'flex-1 truncate text-text-strong-950 transition-all duration-300',
+                'w-auto opacity-100'
+              )}
+            >
+              {label}
+            </span>
           </>
         )}
       </div>
@@ -294,6 +267,5 @@ export {
   SidebarHeader as Header,
   SidebarItem as Item,
   SidebarRoot as Root,
-  useSidebar,
   type IconName,
 }

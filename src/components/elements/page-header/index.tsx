@@ -55,7 +55,7 @@ export const BreadcrumbPageHeader = (props: {
               <React.Fragment key={index}>{item}</React.Fragment>
             ) : (
               <React.Fragment key={index}>
-                <span className="inline-block shrink-0">
+                <span className="inline-block shrink-0 text-text-soft-400">
                   <RiArrowRightSLine className="text-text-soft-400" />
                 </span>
                 {item}
