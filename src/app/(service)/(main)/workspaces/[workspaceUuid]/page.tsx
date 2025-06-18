@@ -16,7 +16,7 @@ export default function WorkspacePage() {
   )?.name
 
   return (
-    <div className="size-full">
+    <div className="flex h-full flex-col gap-6">
       <BreadcrumbPageHeader
         breadcrumbItems={[
           <Link
@@ -36,7 +36,9 @@ export default function WorkspacePage() {
       >
         <WorkspaceDropdown workspaceUuid={workspaceUuid as string} />
       </BreadcrumbPageHeader>
-      <WorksapceRoute workspaceUuid={workspaceUuid as string} />
+      <div className="min-h-0 flex-1 overflow-auto custom-scroll-bar">
+        <WorksapceRoute workspaceUuid={workspaceUuid as string} />
+      </div>
     </div>
   )
 }

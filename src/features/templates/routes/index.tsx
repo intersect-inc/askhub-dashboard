@@ -24,20 +24,24 @@ export const TemplatesRoute = () => {
 
   return (
     <div className="flex size-full flex-col">
-      <SectionTabVertical
-        sections={{ sections: sectionsData?.sections || [] }}
-      />
-      {isLoading && (
+      <div className="shrink-0">
+        <SectionTabVertical
+          sections={{ sections: sectionsData?.sections || [] }}
+        />
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto custom-scroll-bar">
+        {isLoading && (
+          <div className="grid grid-cols-3 gap-4 p-8">
+            <TemplateCardLoader />
+            <TemplateCardLoader />
+            <TemplateCardLoader />
+          </div>
+        )}
         <div className="grid grid-cols-3 gap-4 p-8">
-          <TemplateCardLoader />
-          <TemplateCardLoader />
-          <TemplateCardLoader />
+          {filteredTemplates?.map((template) => (
+            <TemplateCard key={template.uuid} data={template} />
+          ))}
         </div>
-      )}
-      <div className="grid grid-cols-3 gap-4 p-8">
-        {filteredTemplates?.map((template) => (
-          <TemplateCard key={template.uuid} data={template} />
-        ))}
       </div>
     </div>
   )

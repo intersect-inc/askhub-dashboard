@@ -1,11 +1,12 @@
 'use client'
 
-import { RiMore2Line, RiProhibited2Line } from '@remixicon/react'
+import { RiMore2Line } from '@remixicon/react'
 
 import * as Button from '@/components/ui/button'
 import * as Divider from '@/components/ui/divider'
 import * as Dropdown from '@/components/ui/dropdown'
 import { DownloadModal } from '../download-modal'
+import { ExpireWorkspaceModal } from '../expire-workspace-modal'
 
 type Props = {
   workspaceUuid: string
@@ -22,17 +23,11 @@ export const WorkspaceDropdown = ({ workspaceUuid }: Props) => {
         </Dropdown.Trigger>
         <Dropdown.Content align="start">
           <Dropdown.Group>
-            <DownloadModal workspaceUuid={workspaceUuid} />
+            <DownloadModal workspaceUuid={workspaceUuid} workspaceName={''} />
           </Dropdown.Group>
           <Divider.Root variant="line-spacing" />
           <Dropdown.Group>
-            <Dropdown.Item className="text-error-base">
-              <Dropdown.ItemIcon
-                as={RiProhibited2Line}
-                className="text-error-base"
-              />
-              利用を停止する
-            </Dropdown.Item>
+            <ExpireWorkspaceModal workspaceUuid={workspaceUuid} />
           </Dropdown.Group>
         </Dropdown.Content>
       </Dropdown.Root>

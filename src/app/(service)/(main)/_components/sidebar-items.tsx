@@ -1,8 +1,16 @@
 'use client'
 
 import * as Sidebar from '@/components/elements/siderbar'
+import * as Button from '@/components/ui/button'
+import { useDarkMode } from '@/hooks/useDarkMode'
 import { cn } from '@/utils/cn'
-import { RiFileTextLine, RiGroupLine, RiHistoryLine } from '@remixicon/react'
+import {
+  RiFileTextLine,
+  RiGroupLine,
+  RiHistoryLine,
+  RiMoonLine,
+  RiSunLine,
+} from '@remixicon/react'
 import { usePathname, useRouter } from 'next/navigation'
 
 // FIXME:これってどこかに切り出したほうがいい？
@@ -27,6 +35,7 @@ const items = [
 export const SidebarItems = () => {
   const pathname = usePathname()
   const router = useRouter()
+  const { isDark, toggle } = useDarkMode()
 
   return (
     <Sidebar.Content>
@@ -42,6 +51,23 @@ export const SidebarItems = () => {
           className={cn('cursor-pointer')}
         />
       ))}
+
+      {/* Dark Mode Toggle */}
+      <div className="mt-auto flex items-center justify-between">
+        <Button.Root
+          variant="neutral"
+          mode="stroke"
+          size="small"
+          onClick={toggle}
+          className="size-8 p-0"
+        >
+          {isDark ? (
+            <RiMoonLine className="size-4" />
+          ) : (
+            <RiSunLine className="size-4" />
+          )}
+        </Button.Root>
+      </div>
     </Sidebar.Content>
   )
 }

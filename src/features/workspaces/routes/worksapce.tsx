@@ -13,12 +13,12 @@ export const WorksapceRoute = (props: Props) => {
   const { workspaceUuid } = props
 
   return (
-    <div className="min-h-0 flex-1">
-      <div className="grid h-full grid-cols-2 gap-4 overflow-y-auto p-8">
-        <div className="min-h-0">
+    <div className="flex-1 overflow-auto custom-scroll-bar">
+      <div className="grid auto-rows-min gap-4 p-8 pt-0">
+        <div>
           <WorkspaceInfoCard workspaceUuid={workspaceUuid} />
         </div>
-        <div className="min-h-0">
+        <div>
           <UsageMapCard workspaceUuid={workspaceUuid} />
         </div>
         <WorkspaceMemberTable workspaceUuid={workspaceUuid} />
