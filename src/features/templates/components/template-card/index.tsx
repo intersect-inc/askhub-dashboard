@@ -1,13 +1,7 @@
 'use client'
 
-// import { AssistantAvatar } from '@/components/ui/avatar/misc/assistant-avatar'
 import * as Avatar from '@/components/ui/avatar'
 import * as Badge from '@/components/ui/badge'
-// import {
-//   DropdownItems,
-//   DropdownMenuPortal,
-//   DropdownMenuPortalRef,
-// } from '@/components/ui/dropdown'
 
 import { cn } from '@/utils/cn'
 import { AssistantTemplate } from '../../api/getDiscoverAssistantTemplates'
@@ -37,26 +31,7 @@ type TemplateCardProps = {
   className?: string
 }
 
-export const TemplateCard = ({
-  data,
-  //   onEdit,
-  //   onDelete,
-  className,
-}: TemplateCardProps) => {
-  //   const dropdownRef = useRef<DropdownMenuPortalRef>(null)
-
-  //   const handleDeleteClick = () => {
-  //     if (onDelete) {
-  //       onDelete(data.uuid)
-  //     }
-  //   }
-
-  //   const handleEditClick = () => {
-  //     if (onEdit) {
-  //       onEdit(data.uuid)
-  //     }
-  //   }
-
+export const TemplateCard = ({ data, className }: TemplateCardProps) => {
   return (
     <div
       className={cn(
@@ -74,7 +49,7 @@ export const TemplateCard = ({
             )}
           </a>
         </Avatar.Root>
-        <TemplateDropdown />
+        <TemplateDropdown template={data} />
       </div>
 
       <div className="flex flex-col gap-1">
@@ -98,33 +73,6 @@ export const TemplateCard = ({
           {data.sectionName}
         </Badge.Root>
       )}
-
-      {/* <DropdownMenuPortal
-        ref={dropdownRef}
-        className="fixed m-1 max-w-60"
-        onClick={(e) => {
-          e.preventDefault()
-          dropdownRef?.current?.toggle(e)
-        }}
-      >
-        <DropdownItems className="flex flex-col gap-0.5">
-          {onEdit && (
-            <DropdownItems.Item
-              leftIcon={<EditLineIcon />}
-              label="テンプレートを編集する"
-              onClick={() => handleEditClick()}
-            />
-          )}
-          {onDelete && (
-            <DropdownItems.Item
-              leftIcon={<DeleteBinLineIcon />}
-              labelClassName="text-state-error-base"
-              label="テンプレートを削除する"
-              onClick={() => handleDeleteClick()}
-            />
-          )}
-        </DropdownItems>
-      </DropdownMenuPortal> */}
     </div>
   )
 }

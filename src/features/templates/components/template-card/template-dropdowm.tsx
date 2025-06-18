@@ -5,9 +5,14 @@ import { RiMoreFill } from '@remixicon/react'
 import * as Button from '@/components/ui/button'
 import * as Dropdown from '@/components/ui/dropdown'
 import { useState } from 'react'
+import { AssistantTemplate } from '../../api/getDiscoverAssistantTemplates'
 import { DeleteTemplateModal, EditTemplateModal } from '../template-modal'
 
-export const TemplateDropdown = () => {
+type TemplateDropdownProps = {
+  template: AssistantTemplate
+}
+
+export const TemplateDropdown = ({ template }: TemplateDropdownProps) => {
   const [open, setOpen] = useState(false)
   return (
     <Dropdown.Root open={open} onOpenChange={setOpen}>
@@ -26,8 +31,8 @@ export const TemplateDropdown = () => {
       </Dropdown.Trigger>
       <Dropdown.Content align="start" className="w-fit">
         <Dropdown.Group>
-          <EditTemplateModal />
-          <DeleteTemplateModal />
+          <EditTemplateModal template={template} />
+          <DeleteTemplateModal template={template} />
         </Dropdown.Group>
       </Dropdown.Content>
     </Dropdown.Root>

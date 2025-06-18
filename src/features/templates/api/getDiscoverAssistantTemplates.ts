@@ -1,4 +1,4 @@
-import useSWR, { SWRConfiguration } from 'swr'
+import useSWR, { SWRConfiguration, mutate as globalMutate } from 'swr'
 import { z } from 'zod'
 
 import { client } from '@/lib/api'
@@ -56,23 +56,21 @@ export const KEY = (request?: DiscoverAssistantTemplatesRequest) => {
 export const getDiscoverAssistantTemplates = async (
   request?: DiscoverAssistantTemplatesRequest
 ) => {
-  const response = await client.post('/assistant_templates/discover', request)
+  const requestBody = {
+    filter: request?.filter || {},
+    sort: request?.sort,
+  }
+  const response = await client.post(
+    '/assistant_templates/discover',
+    requestBody
+  )
   return DiscoverAssistantTemplatesResponse.parse(response.data)
 }
 
-export const mutateDiscoverAssistantTemplates = async (
-  data?:
-    | DiscoverAssistantTemplatesResponse
-    | ((
-        data: DiscoverAssistantTemplatesResponse | undefined
-      ) => DiscoverAssistantTemplatesResponse | undefined)
-) => {
-  if (typeof data === 'function') {
-    const currentData = await getDiscoverAssistantTemplates()
-    return data(currentData)
-  }
-  const response = await getDiscoverAssistantTemplates()
-  return response
+export const mutateDiscoverAssistantTemplates = async () => {
+  const newData = await getDiscoverAssistantTemplates()
+  await globalMutate(['/assistant_templates/discover'], newData, false)
+  return newData
 }
 
 export const useDiscoverAssistantTemplates = (
@@ -80,17 +78,19 @@ export const useDiscoverAssistantTemplates = (
   options?: SWRConfiguration<DiscoverAssistantTemplatesResponse>
 ) => {
   const { data, error, mutate } = useSWR(
-    KEY(request),
+    ['/assistant_templates/discover'],
     () => getDiscoverAssistantTemplates(request),
-    options
+    {
+      ...options,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
   )
 
   return {
     data,
     error,
     isLoading: !error && !data,
-    mutate: async () => {
-      await mutate()
-    },
+    mutate,
   }
 }
