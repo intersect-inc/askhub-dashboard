@@ -34,7 +34,7 @@ export default function WorkspacePage() {
           </span>,
         ]}
       >
-        <WorkspaceDropdown />
+        <WorkspaceDropdown workspaceUuid={workspaceUuid as string} />
       </BreadcrumbPageHeader>
       <WorksapceRoute workspaceUuid={workspaceUuid as string} />
     </div>
