@@ -1,6 +1,7 @@
 'use client'
 
 import * as Badge from '@/components/ui/badge'
+import * as Divider from '@/components/ui/divider'
 import * as Table from '@/components/ui/table'
 import { MessageDrawer } from '@/features/workspaces/components/message-drawer'
 import { formatISODateTime } from '@/utils/time'
@@ -42,7 +43,7 @@ export const LogTable = ({
   userUuid?: string
   role?: MessageRole
 }) => {
-  const { data, error, size, setSize, isValidating, isLoading } =
+  const { data, size, setSize, isValidating, isLoading, error } =
     useInfiniteMessages(workspaceUuid, userUuid, role)
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -93,9 +94,32 @@ export const LogTable = ({
   }, [data, loadMore, isLoading, isValidating])
 
   if (error) {
-    return <div>エラーが発生しました: {error.message}</div>
+    return (
+      <div className="flex h-full flex-col items-center justify-center">
+        <span className="text-error-base">
+          エラーが発生しました: {error.message}
+        </span>
+      </div>
+    )
   }
-  if (isLoading) return <div>読み込み中...</div>
+
+  if (isLoading)
+    return (
+      <div className="flex h-full flex-col gap-3 px-8">
+        <div className="h-9 w-full rounded-lg bg-bg-weak-50" />
+        <div className="flex flex-col">
+          <div className="h-16 w-full animate-pulse rounded-lg bg-bg-weak-50" />
+          <Divider.Root className="my-2" />
+          <div className="h-16 w-full animate-pulse rounded-lg bg-bg-weak-50" />
+          <Divider.Root className="my-2" />
+          <div className="h-16 w-full animate-pulse rounded-lg bg-bg-weak-50" />
+          <Divider.Root className="my-2" />
+          <div className="h-16 w-full animate-pulse rounded-lg bg-bg-weak-50" />
+          <Divider.Root className="my-2" />
+          <div className="h-16 w-full animate-pulse rounded-lg bg-bg-weak-50" />
+        </div>
+      </div>
+    )
 
   return (
     <div className="flex h-full flex-col">
@@ -124,6 +148,15 @@ export const LogTable = ({
               </Table.Row>
             </Table.Header>
             <Table.Body>
+              {isLoading && (
+                <Table.Row>
+                  <Table.Cell colSpan={6}>
+                    <div className="flex h-full items-center justify-center">
+                      <RiLoader2Fill className="size-6 animate-spin text-text-sub-600" />
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              )}
               {allMessages.map((message) => (
                 <React.Fragment key={message.message.uuid}>
                   <MessageDrawer message={message}>
