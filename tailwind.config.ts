@@ -623,6 +623,10 @@ const config = {
       fontFamily: {
         sans: [`var(${pretendardJpVar})`, ...defaultTheme.fontFamily.sans],
       },
+      backgroundImage: {
+        'gradient-gray':
+          'linear-gradient(180deg, rgba(113, 119, 132, 0.10) 0%, rgba(1113, 119, 132, 0.00) 100%)',
+      },
     },
   },
   plugins: [
