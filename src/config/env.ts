@@ -17,10 +17,3 @@ export const AUTH0_MANAGEMENT_API_CLIENT_SECRET = process.env
   .AUTH0_MANAGEMENT_API_CLIENT_SECRET as string
 
 export const NEXT_AUTH_SECRET = process.env.NEXT_AUTH_SECRET as string
-
-export const CONTACT_EMAIL = 'contact@askhub.jp' as const
-
-export const INTERSECT_WORKSPACES = [
-  '14b9efe5-3b85-4834-b377-bacc05397ac8',
-  '7b012fd2-adf5-4f67-af66-d0987e32e780',
-] as const
