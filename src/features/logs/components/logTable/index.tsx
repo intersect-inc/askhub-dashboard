@@ -107,7 +107,6 @@ export const LogTable = ({
           <Table.Root style={{ tableLayout: 'fixed', width: '100%' }}>
             <Table.Header>
               <Table.Row>
-                <Table.Head className="w-[52px] text-label-sm" />
                 <Table.Head className="w-28 text-label-sm">送信日時</Table.Head>
                 <Table.Head className="w-36 text-label-sm">ユーザー</Table.Head>
                 <Table.Head className="w-44 text-label-sm">
@@ -127,99 +126,99 @@ export const LogTable = ({
             <Table.Body>
               {allMessages.map((message) => (
                 <React.Fragment key={message.message.uuid}>
-                  <Table.Row>
-                    <Table.Cell className="text-paragraph-sm">
-                      <MessageDrawer message={message} />
-                    </Table.Cell>
-                    <Table.Cell className="text-paragraph-sm text-text-strong-950">
-                      <div className="flex flex-col overflow-hidden">
-                        <span>
-                          {
-                            formatISODateTime(message.message.createdAt).split(
-                              ' '
-                            )[0]
-                          }
-                        </span>
-                        <span>
-                          {
-                            formatISODateTime(message.message.createdAt).split(
-                              ' '
-                            )[1]
-                          }
-                        </span>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="text-paragraph-sm">
-                      <div className="flex flex-col overflow-hidden truncate">
-                        <span className="truncate text-paragraph-sm text-text-strong-950">
-                          {message.workspaceName}
-                        </span>
-                        <span className="truncate text-paragraph-sm text-text-strong-950">
-                          {message.memberName}
-                        </span>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="truncate text-paragraph-sm">
-                      <div className="flex flex-col gap-1 overflow-hidden">
-                        <span className="truncate text-paragraph-sm text-text-strong-950">
-                          {message.assistantName}
-                        </span>
-                        <Badge.Root
-                          size="small"
-                          variant="light"
-                          color={
-                            message.message.role === 'user' ? 'blue' : 'gray'
-                          }
-                          className="w-fit"
-                        >
-                          {message.message.role}
-                        </Badge.Root>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="text-paragraph-sm">
-                      <div className="flex flex-col gap-1 overflow-hidden truncate">
-                        <span className="truncate text-label-sm text-text-strong-950">
-                          {convertAction(message.message.action ?? 'その他')}
-                        </span>
-                        <span className="truncate text-paragraph-xs text-text-strong-950">
-                          {message.model}
-                        </span>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="text-paragraph-sm text-text-strong-950">
-                      <div className="overflow-hidden truncate">
-                        {message.message.content}
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="text-paragraph-sm">
-                      <div className="flex flex-col gap-1 overflow-hidden">
-                        {message.message.references
-                          .slice(0, 2)
-                          .map((reference) => (
+                  <MessageDrawer message={message}>
+                    <Table.Row className="cursor-pointer">
+                      <Table.Cell className="text-paragraph-sm text-text-strong-950">
+                        <div className="flex flex-col overflow-hidden">
+                          <span>
+                            {
+                              formatISODateTime(
+                                message.message.createdAt
+                              ).split(' ')[0]
+                            }
+                          </span>
+                          <span>
+                            {
+                              formatISODateTime(
+                                message.message.createdAt
+                              ).split(' ')[1]
+                            }
+                          </span>
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell className="text-paragraph-sm">
+                        <div className="flex flex-col overflow-hidden truncate">
+                          <span className="truncate text-paragraph-sm text-text-strong-950">
+                            {message.workspaceName}
+                          </span>
+                          <span className="truncate text-paragraph-sm text-text-strong-950">
+                            {message.memberName}
+                          </span>
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell className="truncate text-paragraph-sm">
+                        <div className="flex flex-col gap-1 overflow-hidden">
+                          <span className="truncate text-paragraph-sm text-text-strong-950">
+                            {message.assistantName}
+                          </span>
+                          <Badge.Root
+                            size="small"
+                            variant="light"
+                            color={
+                              message.message.role === 'user' ? 'blue' : 'gray'
+                            }
+                            className="w-fit"
+                          >
+                            {message.message.role}
+                          </Badge.Root>
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell className="text-paragraph-sm">
+                        <div className="flex flex-col gap-1 overflow-hidden truncate">
+                          <span className="truncate text-label-sm text-text-strong-950">
+                            {convertAction(message.message.action ?? 'その他')}
+                          </span>
+                          <span className="truncate text-paragraph-xs text-text-strong-950">
+                            {message.model}
+                          </span>
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell className="text-paragraph-sm text-text-strong-950">
+                        <div className="overflow-hidden truncate">
+                          {message.message.content}
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell className="text-paragraph-sm">
+                        <div className="flex flex-col gap-1 overflow-hidden">
+                          {message.message.references
+                            .slice(0, 2)
+                            .map((reference) => (
+                              <Badge.Root
+                                key={reference.uuid}
+                                size="small"
+                                variant="light"
+                                color="gray"
+                                className="w-full truncate"
+                              >
+                                {reference.name}
+                              </Badge.Root>
+                            ))}
+                          {message.message.references.length > 2 && (
                             <Badge.Root
-                              key={reference.uuid}
                               size="small"
                               variant="light"
                               color="gray"
                               className="w-full truncate"
                             >
-                              {reference.name}
+                              他{message.message.references.length - 2}件
                             </Badge.Root>
-                          ))}
-                        {message.message.references.length > 2 && (
-                          <Badge.Root
-                            size="small"
-                            variant="light"
-                            color="gray"
-                            className="w-full truncate"
-                          >
-                            他{message.message.references.length - 2}件
-                          </Badge.Root>
-                        )}
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.RowDivider colSpan={7} />
+                          )}
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                  </MessageDrawer>
+
+                  <Table.RowDivider colSpan={6} />
                 </React.Fragment>
               ))}
               {isValidating && (

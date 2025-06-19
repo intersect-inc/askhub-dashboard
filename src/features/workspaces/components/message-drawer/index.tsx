@@ -1,9 +1,6 @@
 'use client'
 
-import { RiExternalLinkLine } from '@remixicon/react'
-
 import * as Badge from '@/components/ui/badge'
-import * as Button from '@/components/ui/button'
 import * as Divider from '@/components/ui/divider'
 import * as Drawer from '@/components/ui/drawer'
 import { AdminMessage } from '@/features/logs/api/getMessages'
@@ -11,21 +8,13 @@ import { convertAction } from '@/features/logs/components/logTable'
 
 type MessageDrawerProps = {
   message: AdminMessage
+  children: React.ReactNode
 }
 
-export const MessageDrawer = ({ message }: MessageDrawerProps) => {
+export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
   return (
     <Drawer.Root>
-      <Drawer.Trigger asChild>
-        <Button.Root
-          variant="neutral"
-          mode="ghost"
-          onClick={() => {}}
-          size="xxsmall"
-        >
-          <Button.Icon as={RiExternalLinkLine} />
-        </Button.Root>
-      </Drawer.Trigger>
+      <Drawer.Trigger asChild>{children}</Drawer.Trigger>
       <Drawer.Content className="max-h-dvh overflow-hidden">
         <Drawer.Header>
           <Drawer.Title>メッセージの詳細</Drawer.Title>
