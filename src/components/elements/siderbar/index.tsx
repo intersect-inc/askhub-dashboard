@@ -18,7 +18,7 @@ import {
 } from '@remixicon/react'
 import React from 'react'
 
-import * as Button from '@/components/ui/button'
+import * as CompactButton from '@/components/ui/compact-button'
 import { useSidebarStore } from '@/stores/useSidebarStore'
 
 // アイコンマッピング
@@ -142,20 +142,19 @@ function SidebarHeader({
             )}
           </div>
           {showToggle && (
-            <Button.Root
-              variant="neutral"
-              mode="ghost"
-              size="small"
+            <CompactButton.Root
+              variant="stroke"
+              size="medium"
               onClick={toggleCollapsed}
             >
-              <Button.Icon>
+              <CompactButton.Icon>
                 {collapsed ? (
-                  <RiArrowRightDoubleLine className="size-5 text-text-sub-600" />
+                  <RiArrowRightDoubleLine className="size-4 text-text-sub-600" />
                 ) : (
-                  <RiArrowLeftDoubleLine className="size-5 text-text-sub-600" />
+                  <RiArrowLeftDoubleLine className="size-4 text-text-sub-600" />
                 )}
-              </Button.Icon>
-            </Button.Root>
+              </CompactButton.Icon>
+            </CompactButton.Root>
           )}
         </>
       )}

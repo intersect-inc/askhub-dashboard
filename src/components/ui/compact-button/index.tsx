@@ -21,7 +21,7 @@ export const compactButtonVariants = tv({
       // focus
       'focus:outline-none',
     ],
-    icon: '',
+    icon: 'flex items-center justify-center',
   },
   variants: {
     variant: {
