@@ -1,116 +1,103 @@
-import { Suspense } from 'react'
+'use client'
 
-import { redirect } from 'next/navigation'
+import { SessionProvider, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
 
-import * as Modal from '@/components/ui/modal'
-import { SessionExpireModalWithOverlay } from '@/features/auth'
-import { LogoutButton } from '@/features/auth/routes/components/logout-button'
+import {
+  SessionExpireModalProvider,
+  useSessionExpireModal,
+} from '@/features/auth'
 import { getMeWithAuth } from '@/features/user/api/getMe'
-import { auth } from '@/lib/next-auth'
-
 import { Path } from '@/lib/path'
-import { isAfterTime } from '@/utils/time'
+// import { isAfterTime } from '@/utils/time'
 import Logo from '../../../public/vectors/logo.svg'
 import { InitClientSideProvider } from '../init-client-side-provider'
-export const AuthenticateProvider = async ({
+
+export const AuthenticateProvider = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-screen w-screen flex-col items-center justify-center gap-2 bg-bg-white-0">
-          <Logo className="size-20 shrink-0" />
-        </div>
-      }
-    >
-      <Internal>{children}</Internal>
-    </Suspense>
+    <SessionProvider>
+      <Suspense
+        fallback={
+          <div className="flex h-screen w-screen flex-col items-center justify-center gap-2 bg-bg-white-0">
+            <Logo className="size-20 shrink-0" />
+          </div>
+        }
+      >
+        <SessionExpireModalProvider>
+          <Internal>{children}</Internal>
+        </SessionExpireModalProvider>
+      </Suspense>
+    </SessionProvider>
   )
 }
 
-const Internal = async ({ children }: { children: React.ReactNode }) => {
-  const session = await auth()
-  if (!session || !session.accessToken) {
-    redirect(Path.signIn())
-  }
+const Internal = ({ children }: { children: React.ReactNode }) => {
+  const { setIsOpen } = useSessionExpireModal()
+  const router = useRouter()
+  const [token, setToken] = useState<string | null>(null)
+  const { data: session, status } = useSession()
 
-  if (!session.emailVerified) {
-    redirect(Path.verifyEmail())
-  }
+  const isAfterTime = true
 
-  if (isAfterTime(new Date(), session.expires)) {
-    return (
-      <div>
-        <SessionExpireModalWithOverlay />
-        {children}
-      </div>
-    )
-  }
+  useEffect(() => {
+    const checkSession = async () => {
+      if (status === 'loading') return
 
-  const [mePromise] = await Promise.allSettled([
-    getMeWithAuth(session.accessToken),
-  ])
+      if (!session || !session.accessToken) {
+        router.push(Path.signIn())
+        return
+      }
 
-  if (mePromise.status === 'rejected') {
-    if (mePromise.reason.response?.data.message === 'TOKEN_HAS_EXPIRED') {
-      return (
-        <div>
-          <SessionExpireModalWithOverlay />
-          {children}
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <div className="bg-bg-strong-950/50 fixed flex h-screen w-screen items-center justify-center">
-            <Modal.Root>
-              <Modal.Content>
-                <Modal.Title>ユーザー情報が取得できませんでした。</Modal.Title>
-                <Modal.Description>
-                  ログアウト後、もう一度ログインしてください
-                </Modal.Description>
-              </Modal.Content>
-              <Modal.Footer>
-                <LogoutButton className="ml-auto" />
-              </Modal.Footer>
-            </Modal.Root>
-          </div>
-          {children}
-        </div>
-      )
+      if (!session.emailVerified) {
+        router.push(Path.verifyEmail())
+        return
+      }
+
+      // if (isAfterTime(new Date(), session.expires)) {
+      //   setIsOpen(true)
+      //   return
+      // }
+
+      if (isAfterTime) {
+        setIsOpen(true)
+        return
+      }
+
+      try {
+        const me = await getMeWithAuth(session.accessToken)
+
+        if (!me) {
+          setIsOpen(true)
+          return
+        }
+
+        if (!me.user.emailVerified) {
+          router.push(Path.verifyEmail())
+          return
+        }
+
+        setToken(session.accessToken)
+      } catch (error: any) {
+        if (error.response?.data.message === 'TOKEN_HAS_EXPIRED') {
+          setIsOpen(true)
+          return
+        }
+      }
     }
-  }
 
-  if (!mePromise.value) {
-    return (
-      <div>
-        <div className="bg-bg-strong-950/50 fixed flex h-screen w-screen items-center justify-center">
-          <Modal.Root>
-            <Modal.Content>
-              <Modal.Title>ユーザー情報が取得できませんでした。</Modal.Title>
-              <Modal.Description>
-                ログアウト後、もう一度ログインしてください
-              </Modal.Description>
-            </Modal.Content>
-            <Modal.Footer>
-              <LogoutButton className="ml-auto" />
-            </Modal.Footer>
-          </Modal.Root>
-        </div>
-        {children}
-      </div>
-    )
-  }
+    checkSession()
+  }, [router, setIsOpen, session, status, isAfterTime])
 
-  if (!mePromise.value.user.emailVerified) {
-    redirect(Path.verifyEmail())
+  if (!token) {
+    return null
   }
 
   return (
-    <InitClientSideProvider token={session.accessToken}>
-      {children}
-    </InitClientSideProvider>
+    <InitClientSideProvider token={token}>{children}</InitClientSideProvider>
   )
 }
