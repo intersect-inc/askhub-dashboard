@@ -10,8 +10,8 @@ const Table = React.forwardRef<
   React.TableHTMLAttributes<HTMLTableElement>
 >(({ className, ...rest }, forwardedRef) => {
   return (
-    <div className={cn('w-full overflow-x-auto', className)}>
-      <table ref={forwardedRef} className="w-full" {...rest} />
+    <div className="w-full overflow-x-auto">
+      <table ref={forwardedRef} className={cn('w-full', className)} {...rest} />
     </div>
   )
 })
@@ -78,13 +78,15 @@ TableRow.displayName = 'TableRow'
 function TableRowDivider({
   className,
   dividerClassName,
+  colSpan,
   ...rest
 }: React.ComponentPropsWithoutRef<typeof Divider.Root> & {
   dividerClassName?: string
+  colSpan?: number
 }) {
   return (
     <tr aria-hidden="true" className={className}>
-      <td colSpan={999} className="py-1">
+      <td colSpan={colSpan || 999} className="py-1">
         <Divider.Root
           variant="line-spacing"
           className={dividerClassName}

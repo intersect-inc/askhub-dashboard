@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 import defaultTheme from 'tailwindcss/defaultTheme'
+import plugin from 'tailwindcss/plugin'
 import { TOAST_ANIMATION, TOAST_KEYFRAMES } from './src/providers/toast/style'
 import { pretendardJpVar } from './src/styles/font/variables'
 
@@ -260,11 +261,13 @@ export const borderRadii = {
 
 const config = {
   darkMode: ['class'],
-  safelist: ['.dark'],
+  safelist: ['.dark', '.dot'],
   content: [
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/utils/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/features/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/providers/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './utils/**/*.{js,ts,jsx,tsx,mdx}',
@@ -622,7 +625,43 @@ const config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [
+    tailwindcssAnimate,
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.custom-scroll-bar': {
+          overflow: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '6px',
+            height: '6px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#D0D5DD',
+            borderRadius: '3px',
+            visibility: 'hidden',
+          },
+          '&:hover::-webkit-scrollbar-thumb': {
+            visibility: 'visible',
+          },
+          scrollbarGutter: 'auto',
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'transparent transparent',
+          '&:hover': {
+            scrollbarColor: '#D0D5DD transparent',
+          },
+        },
+        '.dot': {
+          '&::before': {
+            content: '""',
+            display: 'block',
+          },
+        },
+      })
+    }),
+  ],
 } satisfies Config
 
 export default config

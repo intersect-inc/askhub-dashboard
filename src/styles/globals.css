@@ -382,17 +382,22 @@
     --social-amazon: #fff;
     --social-zendesk: #fff;
   }
-  /*#endregion Colors */
-}
 
-/* custom scale for Remix Icon */
-.remixicon path {
-  transform: scale(0.8996);
-  transform-origin: center;
-}
+  html,
+  body,
+  #__next {
+    height: 100%;
+  }
 
-/* フォントファミリーの設定 */
-html,
-body {
-  font-family: var(--font-pretendard-jp);
+  /* custom scale for Remix Icon */
+  .remixicon path {
+    transform: scale(0.8996);
+    transform-origin: center;
+  }
+
+  /* フォントファミリーの設定 */
+  html,
+  body {
+    font-family: var(--font-pretendard-jp);
+  }
 }
