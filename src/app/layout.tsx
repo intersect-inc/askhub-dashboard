@@ -3,8 +3,19 @@ import { pretendardJp } from '@/styles/font/local-fonts'
 import type { Metadata } from 'next'
 import '../styles/globals.css'
 
+const MetaTitle = () => {
+  switch (process.env.NEXT_PUBLIC_APP_URL) {
+    case 'https://app.askhub.jp':
+      return 'Askhub管理画面'
+    case 'https://app-stg1.askhub.jp':
+      return 'Askhub管理画面[STG]'
+    default:
+      return 'Askhub管理画面[DEV]'
+  }
+}
+
 export const metadata: Metadata = {
-  title: 'Askhub Dashboard',
+  title: MetaTitle(),
   icons: {
     icon: '/meta/favicon.ico',
   },
