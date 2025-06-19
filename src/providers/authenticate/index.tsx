@@ -7,9 +7,9 @@ import { SessionExpireModalWithOverlay } from '@/features/auth'
 import { LogoutButton } from '@/features/auth/routes/components/logout-button'
 import { getMeWithAuth } from '@/features/user/api/getMe'
 import { auth } from '@/lib/next-auth'
-
 import { Path } from '@/lib/path'
 import { isAfterTime } from '@/utils/time'
+import { RiErrorWarningFill } from '@remixicon/react'
 import Logo from '../../../public/vectors/logo.svg'
 import { InitClientSideProvider } from '../init-client-side-provider'
 export const AuthenticateProvider = async ({
@@ -64,19 +64,26 @@ const Internal = async ({ children }: { children: React.ReactNode }) => {
     } else {
       return (
         <div>
-          <div className="bg-bg-strong-950/50 fixed flex h-screen w-screen items-center justify-center">
-            <Modal.Root>
-              <Modal.Content>
-                <Modal.Title>ユーザー情報が取得できませんでした。</Modal.Title>
-                <Modal.Description>
-                  ログアウト後、もう一度ログインしてください
-                </Modal.Description>
-              </Modal.Content>
+          <Modal.Root open={true}>
+            <Modal.Content showClose={false}>
+              <Modal.Body className="flex items-start gap-4">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-10 bg-error-lighter">
+                  <RiErrorWarningFill className="size-6 text-error-base" />
+                </div>
+                <div className="space-y-1">
+                  <div className="text-label-md text-text-strong-950">
+                    ユーザー情報が取得できませんでした。
+                  </div>
+                  <div className="text-paragraph-sm text-text-sub-600">
+                    ログアウト後、もう一度ログインしてください
+                  </div>
+                </div>
+              </Modal.Body>
               <Modal.Footer>
-                <LogoutButton className="ml-auto" />
+                <LogoutButton variant="text" className="ml-auto" />
               </Modal.Footer>
-            </Modal.Root>
-          </div>
+            </Modal.Content>
+          </Modal.Root>
           {children}
         </div>
       )
@@ -86,19 +93,26 @@ const Internal = async ({ children }: { children: React.ReactNode }) => {
   if (!mePromise.value) {
     return (
       <div>
-        <div className="bg-bg-strong-950/50 fixed flex h-screen w-screen items-center justify-center">
-          <Modal.Root>
-            <Modal.Content>
-              <Modal.Title>ユーザー情報が取得できませんでした。</Modal.Title>
-              <Modal.Description>
-                ログアウト後、もう一度ログインしてください
-              </Modal.Description>
-            </Modal.Content>
+        <Modal.Root open={true}>
+          <Modal.Content showClose={false}>
+            <Modal.Body className="flex items-start gap-4">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-10 bg-error-lighter">
+                <RiErrorWarningFill className="size-6 text-error-base" />
+              </div>
+              <div className="space-y-1">
+                <div className="text-label-md text-text-strong-950">
+                  ユーザー情報が取得できませんでした。
+                </div>
+                <div className="text-paragraph-sm text-text-sub-600">
+                  ログアウト後、もう一度ログインしてください
+                </div>
+              </div>
+            </Modal.Body>
             <Modal.Footer>
-              <LogoutButton className="ml-auto" />
+              <LogoutButton variant="text" className="ml-auto" />
             </Modal.Footer>
-          </Modal.Root>
-        </div>
+          </Modal.Content>
+        </Modal.Root>
         {children}
       </div>
     )
