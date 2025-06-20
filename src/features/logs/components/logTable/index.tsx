@@ -4,6 +4,7 @@ import * as Badge from '@/components/ui/badge'
 import * as Divider from '@/components/ui/divider'
 import * as Table from '@/components/ui/table'
 
+import { cn } from '@/utils/cn'
 import { formatISODateTime } from '@/utils/time'
 import { RiLoader2Fill } from '@remixicon/react'
 import React, { useCallback, useEffect, useRef } from 'react'
@@ -46,7 +47,7 @@ export const LogTable = ({
 }) => {
   const { data, size, setSize, isValidating, isLoading, error } =
     useInfiniteMessages(workspaceUuid, userUuid, role)
-  const { setSelectedMessage } = useMessageDrawerStore()
+  const { selectedMessage, setSelectedMessage } = useMessageDrawerStore()
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -162,7 +163,12 @@ export const LogTable = ({
               {allMessages.map((message) => (
                 <React.Fragment key={message.message.uuid}>
                   <Table.Row
-                    className="cursor-pointer"
+                    className={cn(
+                      'cursor-pointer',
+                      selectedMessage?.message.uuid === message.message.uuid
+                        ? 'bg-bg-weak-50'
+                        : ''
+                    )}
                     onClick={() => setSelectedMessage(message)}
                   >
                     <Table.Cell className="text-paragraph-sm text-text-strong-950">
