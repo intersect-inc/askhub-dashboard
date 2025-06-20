@@ -1,10 +1,11 @@
 'use client'
 
+import { format } from 'date-fns'
 import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
 
 import * as Button from '@/components/ui/button'
 import * as Dropdown from '@/components/ui/dropdown'
-import * as Input from '@/components/ui/input'
 import * as Label from '@/components/ui/label'
 import * as Modal from '@/components/ui/modal'
 import { toast } from '@/components/ui/toast'
@@ -20,6 +21,7 @@ import {
   downloadAssistantUsageReport,
   downloadUsageLogsReport,
 } from '../../api/downloadReports'
+import { Datepicker } from '../range-date-picker'
 
 type Props = {
   workspaceUuid: string
@@ -33,20 +35,38 @@ export const DownloadModal = (props: Props) => {
   const [selectedReportType, setSelectedReportType] = useState<
     'all' | 'ai_usage' | 'assistant_usage' | 'usage_logs'
   >('all')
+  const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
   const downloadFormSchema = z.object({
-    month: z.string().min(1, 'month is required'),
     reportType: z.enum(['all', 'ai_usage', 'assistant_usage', 'usage_logs']),
   })
 
   type FormValues = z.infer<typeof downloadFormSchema>
 
   const onSubmit = async (data: FormValues) => {
+    if (!dateRange?.from || !dateRange?.to) {
+      toast.custom(
+        (t) => (
+          <AlertToast.Root
+            t={t}
+            status="error"
+            message="日付範囲を選択してください"
+            variant="lighter"
+          />
+        ),
+        {
+          position: 'bottom-left',
+        }
+      )
+      return
+    }
+
     setIsDownloading(true)
     try {
       const params: DownloadReportRequest = {
         workspace_uuid: workspaceUuid,
-        month: data.month,
+        start_date: format(dateRange.from, 'yyyy-MM-dd'),
+        end_date: format(dateRange.to, 'yyyy-MM-dd'),
       }
 
       switch (data.reportType) {
@@ -101,15 +121,9 @@ export const DownloadModal = (props: Props) => {
     resolver: zodResolver(downloadFormSchema),
     defaultValues: {
       reportType: 'all',
-      month: new Date().toISOString().slice(0, 7), // YYYY-MM format
     },
   })
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = formMethods
+  const { handleSubmit, setValue } = formMethods
 
   const reportTypeOptions = [
     { value: 'all', label: 'すべてのレポート (ZIP)' },
@@ -148,18 +162,11 @@ export const DownloadModal = (props: Props) => {
           </Modal.Header>
           <Modal.Body className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <Label.Root htmlFor="month">
-                対象月
+              <Label.Root>
+                期間
                 <Label.Asterisk />
               </Label.Root>
-              <Input.Root>
-                <Input.Wrapper>
-                  <Input.Input id="month" type="month" {...register('month')} />
-                </Input.Wrapper>
-              </Input.Root>
-              {errors.month && (
-                <p className="text-red-500">{errors.month.message}</p>
-              )}
+              <Datepicker value={dateRange} onChange={setDateRange} />
             </div>
             <div className="flex flex-col gap-2">
               <Label.Root>
