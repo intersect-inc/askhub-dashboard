@@ -6,9 +6,9 @@ import '../styles/globals.css'
 
 const MetaTitle = () => {
   switch (process.env.NEXT_PUBLIC_APP_URL) {
-    case 'https://admin.askhub.jp':
+    case 'https://api.askhub.jp':
       return 'Askhub管理画面'
-    case 'https://admin-stg1.askhub.jp':
+    case 'https://api-stg1.askhub.jp':
       return 'Askhub管理画面[STG]'
     default:
       return 'Askhub管理画面[DEV]'
