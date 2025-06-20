@@ -5,7 +5,7 @@ import { ThemeProvider } from 'next-themes'
 import '../styles/globals.css'
 
 const MetaTitle = () => {
-  switch (process.env.NEXT_PUBLIC_APP_URL) {
+  switch (process.env.NEXT_PUBLIC_API_URL) {
     case 'https://api.askhub.jp':
       return 'Askhub管理画面'
     case 'https://api-stg1.askhub.jp':
