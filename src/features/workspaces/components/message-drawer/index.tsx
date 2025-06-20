@@ -57,24 +57,34 @@ export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
                 </Badge.Root>
               </div>
             </div>
-            <Divider.Root variant="line-spacing" />
-            <div className="flex flex-col gap-2">
-              <span className="text-label-sm text-text-sub-600">
-                アシスタント説明
-              </span>
-              <span className="text-paragraph-sm text-text-strong-950">
-                {message.assistantDescription}
-              </span>
-            </div>
-            <Divider.Root variant="line-spacing" />
-            <div className="flex flex-col gap-2">
-              <span className="text-label-sm text-text-sub-600">
-                AIへの事前指示
-              </span>
-              <span className="text-paragraph-sm text-text-strong-950">
-                {message.assistantInstruction}
-              </span>
-            </div>
+
+            {message.assistantDescription && (
+              <>
+                <Divider.Root variant="line-spacing" />
+                <div className="flex flex-col gap-2">
+                  <span className="text-label-sm text-text-sub-600">
+                    アシスタント説明
+                  </span>
+                  <span className="text-paragraph-sm text-text-strong-950">
+                    {message.assistantDescription}
+                  </span>
+                </div>
+              </>
+            )}
+
+            {message.assistantInstruction && (
+              <>
+                <Divider.Root variant="line-spacing" />
+                <div className="flex flex-col gap-2">
+                  <span className="text-label-sm text-text-sub-600">
+                    AIへの事前指示
+                  </span>
+                  <span className="text-paragraph-sm text-text-strong-950">
+                    {message.assistantInstruction}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
 
           <Divider.Root variant="solid-text">モジュール/モデル</Divider.Root>
