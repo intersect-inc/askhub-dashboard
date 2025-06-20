@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface SidebarState {
+type SidebarState = {
   collapsed: boolean
   hovered: boolean
   setCollapsed: (collapsed: boolean) => void
