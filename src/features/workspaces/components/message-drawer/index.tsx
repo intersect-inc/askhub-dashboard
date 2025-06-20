@@ -38,6 +38,7 @@ export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
             </span>
           </div>
 
+          {/* FIXME: stgプッシュ用のコメント */}
           <Divider.Root variant="solid-text">アシスタント情報</Divider.Root>
           <div className="flex flex-col gap-3 p-5">
             <div className="flex flex-col gap-2">
