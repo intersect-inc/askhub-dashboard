@@ -19,13 +19,8 @@ export const useMessageDrawerStore = create<MessageDrawerStore>((set, get) => ({
       set({ open: false, selectedMessage: null })
     } else if (message === null) {
       set({ open: false, selectedMessage: null })
-    } else if (currentMessage === null) {
-      set({ open: true, selectedMessage: message })
     } else {
-      set({ open: false, selectedMessage: currentMessage })
-      setTimeout(() => {
-        set({ open: true, selectedMessage: message })
-      }, 200)
+      set({ open: true, selectedMessage: message })
     }
   },
   reset: () => set({ open: false, selectedMessage: null }),
