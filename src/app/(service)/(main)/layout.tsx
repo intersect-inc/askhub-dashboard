@@ -27,7 +27,7 @@ export default function MainLayout({
         </Sidebar.Footer>
       </Sidebar.Root>
       <div
-        className="absolute left-0 top-0 z-50 h-full w-4"
+        className="absolute left-0 top-0 z-40 h-full w-4"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       />

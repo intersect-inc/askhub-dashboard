@@ -3,11 +3,13 @@
 import * as Badge from '@/components/ui/badge'
 import * as Divider from '@/components/ui/divider'
 import * as Table from '@/components/ui/table'
-import { MessageDrawer } from '@/features/workspaces/components/message-drawer'
+
+import { cn } from '@/utils/cn'
 import { formatISODateTime } from '@/utils/time'
 import { RiLoader2Fill } from '@remixicon/react'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { MessageRole, useInfiniteMessages } from '../../api/getMessages'
+import { useMessageDrawerStore } from '../../store/useMessageDrawerStore'
 
 export const convertAction = (action: string) => {
   switch (action) {
@@ -45,6 +47,7 @@ export const LogTable = ({
 }) => {
   const { data, size, setSize, isValidating, isLoading, error } =
     useInfiniteMessages(workspaceUuid, userUuid, role)
+  const { selectedMessage, setSelectedMessage } = useMessageDrawerStore()
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -159,97 +162,103 @@ export const LogTable = ({
               )}
               {allMessages.map((message) => (
                 <React.Fragment key={message.message.uuid}>
-                  <MessageDrawer message={message}>
-                    <Table.Row className="cursor-pointer">
-                      <Table.Cell className="text-paragraph-sm text-text-strong-950">
-                        <div className="flex flex-col overflow-hidden">
-                          <span>
-                            {
-                              formatISODateTime(
-                                message.message.createdAt
-                              ).split(' ')[0]
-                            }
-                          </span>
-                          <span>
-                            {
-                              formatISODateTime(
-                                message.message.createdAt
-                              ).split(' ')[1]
-                            }
-                          </span>
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className="text-paragraph-sm">
-                        <div className="flex flex-col overflow-hidden truncate">
-                          <span className="truncate text-paragraph-sm text-text-strong-950">
-                            {message.workspaceName}
-                          </span>
-                          <span className="truncate text-paragraph-sm text-text-strong-950">
-                            {message.memberName}
-                          </span>
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className="truncate text-paragraph-sm">
-                        <div className="flex flex-col gap-1 overflow-hidden">
-                          <span className="truncate text-paragraph-sm text-text-strong-950">
-                            {message.assistantName}
-                          </span>
-                          <Badge.Root
-                            size="small"
-                            variant="light"
-                            color={
-                              message.message.role === 'user' ? 'blue' : 'gray'
-                            }
-                            className="w-fit"
-                          >
-                            {message.message.role}
-                          </Badge.Root>
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className="text-paragraph-sm">
-                        <div className="flex flex-col gap-1 overflow-hidden truncate">
-                          <span className="truncate text-label-sm text-text-strong-950">
-                            {convertAction(message.message.action ?? 'その他')}
-                          </span>
-                          <span className="truncate text-paragraph-xs text-text-strong-950">
-                            {message.model}
-                          </span>
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className="text-paragraph-sm text-text-strong-950">
-                        <div className="overflow-hidden truncate">
-                          {message.message.content}
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className="text-paragraph-sm">
-                        <div className="flex flex-col gap-1 overflow-hidden">
-                          {message.message.references
-                            .slice(0, 2)
-                            .map((reference) => (
-                              <Badge.Root
-                                key={reference.uuid}
-                                size="small"
-                                variant="light"
-                                color="gray"
-                                className="w-full truncate"
-                              >
-                                {reference.name}
-                              </Badge.Root>
-                            ))}
-                          {message.message.references.length > 2 && (
+                  <Table.Row
+                    className={cn(
+                      'cursor-pointer',
+                      selectedMessage?.message.uuid === message.message.uuid
+                        ? 'bg-bg-weak-50'
+                        : ''
+                    )}
+                    onClick={() => setSelectedMessage(message)}
+                  >
+                    <Table.Cell className="text-paragraph-sm text-text-strong-950">
+                      <div className="flex flex-col overflow-hidden">
+                        <span>
+                          {
+                            formatISODateTime(message.message.createdAt).split(
+                              ' '
+                            )[0]
+                          }
+                        </span>
+                        <span>
+                          {
+                            formatISODateTime(message.message.createdAt).split(
+                              ' '
+                            )[1]
+                          }
+                        </span>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="text-paragraph-sm">
+                      <div className="flex flex-col overflow-hidden truncate">
+                        <span className="truncate text-paragraph-sm text-text-strong-950">
+                          {message.workspaceName}
+                        </span>
+                        <span className="truncate text-paragraph-sm text-text-strong-950">
+                          {message.memberName}
+                        </span>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="truncate text-paragraph-sm">
+                      <div className="flex flex-col gap-1 overflow-hidden">
+                        <span className="truncate text-paragraph-sm text-text-strong-950">
+                          {message.assistantName}
+                        </span>
+                        <Badge.Root
+                          size="small"
+                          variant="light"
+                          color={
+                            message.message.role === 'user' ? 'blue' : 'gray'
+                          }
+                          className="w-fit"
+                        >
+                          {message.message.role}
+                        </Badge.Root>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="text-paragraph-sm">
+                      <div className="flex flex-col gap-1 overflow-hidden truncate">
+                        <span className="truncate text-label-sm text-text-strong-950">
+                          {convertAction(message.message.action ?? 'その他')}
+                        </span>
+                        <span className="truncate text-paragraph-xs text-text-strong-950">
+                          {message.model}
+                        </span>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="text-paragraph-sm text-text-strong-950">
+                      <div className="overflow-hidden truncate">
+                        {message.message.content}
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="text-paragraph-sm">
+                      <div className="flex flex-col gap-1 overflow-hidden">
+                        {message.message.references
+                          .slice(0, 2)
+                          .map((reference) => (
                             <Badge.Root
+                              key={reference.uuid}
                               size="small"
                               variant="light"
                               color="gray"
                               className="w-full truncate"
                             >
-                              他{message.message.references.length - 2}件
+                              {reference.name}
                             </Badge.Root>
-                          )}
-                        </div>
-                      </Table.Cell>
-                    </Table.Row>
-                  </MessageDrawer>
+                          ))}
+                        {message.message.references.length > 2 && (
+                          <Badge.Root
+                            size="small"
+                            variant="light"
+                            color="gray"
+                            className="w-full truncate"
+                          >
+                            他{message.message.references.length - 2}件
+                          </Badge.Root>
+                        )}
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
 
                   <Table.RowDivider colSpan={6} />
                 </React.Fragment>
