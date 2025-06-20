@@ -1,7 +1,11 @@
 'use client'
 
 import * as Sidebar from '@/components/elements/siderbar'
+import { MessageDrawer } from '@/features/logs/components/messageDrawer'
+import { useDrawerStore } from '@/stores/useDrawerStore'
 import { useSidebarStore } from '@/stores/useSidebarStore'
+import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 import AskhubIcon from '../../../../public/vectors/logo.svg'
 import { SidebarFooterItem } from './_components/sidebar-footer-item'
 import { SidebarItems } from './_components/sidebar-items'
@@ -12,6 +16,12 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   const { collapsed, setHovered } = useSidebarStore()
+  const { reset } = useDrawerStore()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    reset()
+  }, [pathname, reset])
 
   return (
     <div className="flex h-dvh max-h-dvh w-screen overflow-hidden">
@@ -27,7 +37,7 @@ export default function MainLayout({
         </Sidebar.Footer>
       </Sidebar.Root>
       <div
-        className="absolute left-0 top-0 z-50 h-full w-4"
+        className="absolute left-0 top-0 z-40 h-full w-4"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       />
@@ -39,6 +49,7 @@ export default function MainLayout({
       >
         {children}
       </div>
+      <MessageDrawer />
     </div>
   )
 }
