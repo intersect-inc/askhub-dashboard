@@ -19,7 +19,7 @@ export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
         <Drawer.Header>
           <Drawer.Title>メッセージの詳細</Drawer.Title>
         </Drawer.Header>
-        <Drawer.Body>
+        <Drawer.Body className="overflow-y-auto custom-scroll-bar">
           <Divider.Root variant="solid-text">ユーザー情報</Divider.Root>
           <div className="grid grid-cols-[auto_1fr] gap-x-3 p-5">
             <div className="row-span-2 size-10 rounded-full bg-primary-base" />
@@ -40,7 +40,7 @@ export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
 
           {/* FIXME: stgプッシュ用のコメント */}
           <Divider.Root variant="solid-text">アシスタント情報</Divider.Root>
-          <div className="flex max-h-80 flex-col gap-3 overflow-y-auto p-5 custom-scroll-bar">
+          <div className="flex flex-col gap-3 p-5">
             <div className="flex flex-col gap-2">
               <span className="text-label-sm text-text-sub-600">
                 アシスタント名
@@ -58,24 +58,34 @@ export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
                 </Badge.Root>
               </div>
             </div>
-            <Divider.Root variant="line-spacing" />
-            <div className="flex flex-col gap-2">
-              <span className="text-label-sm text-text-sub-600">
-                アシスタント説明
-              </span>
-              <span className="text-paragraph-sm text-text-strong-950">
-                {message.assistantDescription}
-              </span>
-            </div>
-            <Divider.Root variant="line-spacing" />
-            <div className="flex max-h-48 flex-col gap-2">
-              <span className="text-label-sm text-text-sub-600">
-                AIへの事前指示
-              </span>
-              <span className="text-paragraph-sm text-text-strong-950">
-                {message.assistantInstruction}
-              </span>
-            </div>
+
+            {message.assistantDescription && (
+              <>
+                <Divider.Root variant="line-spacing" />
+                <div className="flex flex-col gap-2">
+                  <span className="text-label-sm text-text-sub-600">
+                    アシスタント説明
+                  </span>
+                  <span className="text-paragraph-sm text-text-strong-950">
+                    {message.assistantDescription}
+                  </span>
+                </div>
+              </>
+            )}
+
+            {message.assistantInstruction && (
+              <>
+                <Divider.Root variant="line-spacing" />
+                <div className="flex flex-col gap-2">
+                  <span className="text-label-sm text-text-sub-600">
+                    AIへの事前指示
+                  </span>
+                  <span className="text-paragraph-sm text-text-strong-950">
+                    {message.assistantInstruction}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
 
           <Divider.Root variant="solid-text">モジュール/モデル</Divider.Root>
@@ -94,7 +104,7 @@ export const MessageDrawer = ({ message, children }: MessageDrawerProps) => {
           </div>
 
           <Divider.Root variant="solid-text">コンテンツ</Divider.Root>
-          <div className="max-h-96 overflow-y-auto p-5 custom-scroll-bar">
+          <div className="p-5">
             <span className="text-paragraph-sm text-text-strong-950">
               {message.message.content}
             </span>

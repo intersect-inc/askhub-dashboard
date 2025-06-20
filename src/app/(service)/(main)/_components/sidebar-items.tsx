@@ -2,7 +2,6 @@
 
 import * as Sidebar from '@/components/elements/siderbar'
 import * as Button from '@/components/ui/button'
-import { useDarkMode } from '@/hooks/useDarkMode'
 import { cn } from '@/utils/cn'
 import {
   RiFileTextLine,
@@ -11,6 +10,7 @@ import {
   RiMoonLine,
   RiSunLine,
 } from '@remixicon/react'
+import { useTheme } from 'next-themes'
 import { usePathname, useRouter } from 'next/navigation'
 
 // FIXME:これってどこかに切り出したほうがいい？
@@ -35,7 +35,11 @@ const items = [
 export const SidebarItems = () => {
   const pathname = usePathname()
   const router = useRouter()
-  const { isDark, toggle } = useDarkMode()
+  const { theme, setTheme } = useTheme()
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
 
   return (
     <Sidebar.Content>
@@ -58,10 +62,10 @@ export const SidebarItems = () => {
           variant="neutral"
           mode="stroke"
           size="small"
-          onClick={toggle}
+          onClick={toggleTheme}
           className="size-8 p-0"
         >
-          {isDark ? (
+          {theme === 'dark' ? (
             <RiMoonLine className="size-4" />
           ) : (
             <RiSunLine className="size-4" />

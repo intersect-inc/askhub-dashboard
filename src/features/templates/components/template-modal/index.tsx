@@ -217,7 +217,7 @@ export const DeleteTemplateModal = ({ template }: EditTemplateModalProps) => {
           テンプレートを削除する
         </Dropdown.Item>
       </Modal.Trigger>
-      <Modal.Content className="max-w-[440px]">
+      <Modal.Content className="max-w-[440px]" showClose={false}>
         <Modal.Body className="flex items-start gap-4">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-10 bg-error-lighter">
             <RiErrorWarningFill className="size-6 text-error-base" />
