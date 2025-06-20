@@ -3,11 +3,12 @@
 import * as Badge from '@/components/ui/badge'
 import * as Divider from '@/components/ui/divider'
 import * as Table from '@/components/ui/table'
-import { useDrawerStore } from '@/stores/useDrawerStore'
+
 import { formatISODateTime } from '@/utils/time'
 import { RiLoader2Fill } from '@remixicon/react'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { MessageRole, useInfiniteMessages } from '../../api/getMessages'
+import { useDrawerStore } from '../../store/useDrawerStore'
 
 export const convertAction = (action: string) => {
   switch (action) {
@@ -45,6 +46,7 @@ export const LogTable = ({
 }) => {
   const { data, size, setSize, isValidating, isLoading, error } =
     useInfiniteMessages(workspaceUuid, userUuid, role)
+  const { setSelectedMessage } = useDrawerStore()
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -161,10 +163,7 @@ export const LogTable = ({
                 <React.Fragment key={message.message.uuid}>
                   <Table.Row
                     className="cursor-pointer"
-                    onClick={() => {
-                      const store = useDrawerStore.getState()
-                      store.setSelectedMessage(message)
-                    }}
+                    onClick={() => setSelectedMessage(message)}
                   >
                     <Table.Cell className="text-paragraph-sm text-text-strong-950">
                       <div className="flex flex-col overflow-hidden">

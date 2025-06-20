@@ -3,9 +3,9 @@
 import * as Badge from '@/components/ui/badge'
 import * as Button from '@/components/ui/button'
 import * as Divider from '@/components/ui/divider'
-import { useDrawerStore } from '@/stores/useDrawerStore'
 import { cn } from '@/utils/cn'
 import { RiCloseLine } from '@remixicon/react'
+import { useDrawerStore } from '../../store/useDrawerStore'
 import { convertAction } from '../logTable'
 
 export const MessageDrawer = () => {
