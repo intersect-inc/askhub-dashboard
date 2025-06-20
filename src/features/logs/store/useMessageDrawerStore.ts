@@ -1,7 +1,7 @@
 import { AdminMessage } from '@/features/logs/api/getMessages'
 import { create } from 'zustand'
 
-type DrawerStore = {
+type MessageDrawerStore = {
   open: boolean
   selectedMessage: AdminMessage | null
   setOpen: (open: boolean) => void
@@ -9,7 +9,7 @@ type DrawerStore = {
   reset: () => void
 }
 
-export const useDrawerStore = create<DrawerStore>((set, get) => ({
+export const useMessageDrawerStore = create<MessageDrawerStore>((set, get) => ({
   open: false,
   selectedMessage: null,
   setOpen: (open) => set({ open }),

@@ -5,11 +5,11 @@ import * as Button from '@/components/ui/button'
 import * as Divider from '@/components/ui/divider'
 import { cn } from '@/utils/cn'
 import { RiCloseLine } from '@remixicon/react'
-import { useDrawerStore } from '../../store/useDrawerStore'
+import { useMessageDrawerStore } from '../../store/useMessageDrawerStore'
 import { convertAction } from '../logTable'
 
 export const MessageDrawer = () => {
-  const { open, selectedMessage, setSelectedMessage } = useDrawerStore()
+  const { open, selectedMessage, setSelectedMessage } = useMessageDrawerStore()
 
   return (
     <div

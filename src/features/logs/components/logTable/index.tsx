@@ -8,7 +8,7 @@ import { formatISODateTime } from '@/utils/time'
 import { RiLoader2Fill } from '@remixicon/react'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { MessageRole, useInfiniteMessages } from '../../api/getMessages'
-import { useDrawerStore } from '../../store/useDrawerStore'
+import { useMessageDrawerStore } from '../../store/useMessageDrawerStore'
 
 export const convertAction = (action: string) => {
   switch (action) {
@@ -46,7 +46,7 @@ export const LogTable = ({
 }) => {
   const { data, size, setSize, isValidating, isLoading, error } =
     useInfiniteMessages(workspaceUuid, userUuid, role)
-  const { setSelectedMessage } = useDrawerStore()
+  const { setSelectedMessage } = useMessageDrawerStore()
 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
