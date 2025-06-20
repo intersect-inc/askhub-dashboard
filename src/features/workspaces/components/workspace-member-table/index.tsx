@@ -103,7 +103,7 @@ export const WorkspaceMemberTable = (props: Props) => {
 
             return (
               <React.Fragment key={member.workspaceMemberUuid}>
-                <Table.Row className="cursor-pointer">
+                <Table.Row>
                   <Table.Cell>
                     <Checkbox.Root
                       checked={isSelected}
